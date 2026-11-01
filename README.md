@@ -368,8 +368,4 @@ This student repository intentionally contains no automatically triggered deploy
 
 Some upstream examples use Bash. This lab's local commands use PowerShell: `$NAME = "value"` for variables, `$env:NAME` for environment variables, and `Invoke-RestMethod` for HTTP requests. A Bash trailing `\` is not PowerShell line continuation. Commands here use single lines to avoid that difference.
 
-**Course alignment:** YAML, namespaces, Deployments, Services and managed Kubernetes; registry and pipeline integration follows next. The sample application is maintained by GoogleCloudPlatform in the Apache-2.0-licensed `kubernetes-engine-samples` repository; consult its upstream license. These lab materials do not include the original syllabus or redistribute application source code.
-
-**Validation note:** materials were reviewed locally; successful execution on your teaching cluster must be confirmed during instructor rehearsal.
-
-# Practical_Devops04
+**Course alignment:** YAML, namespaces, Deployments, Services and managed Kubernetes; registry and pipeline integration follows next. The sample application is maintained by GoogleCloudPlatform in the Apache-2.0-licensed `kubernetes-engine-samples` repository; consult its upstream license.
