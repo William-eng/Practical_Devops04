@@ -1,6 +1,5 @@
 # Practical DevOps Cohort 4 — Deploy, Observe, Recover
 
-**Facilitator:** William Olawuwo — Cloud, DevOps & FinOps  
 **Duration:** 2 hours  
 **Terminal:** Windows PowerShell or PowerShell 7
 
@@ -29,20 +28,20 @@ Download this repository as a ZIP or clone it, then open PowerShell in its root 
 
 ## Today's route
 
-| Minutes | Activity | Question to answer |
-|---|---|---|
-| 0–12 | Welcome and introductions | What would you like to operate confidently? |
-| 12–25 | Revision in pairs | Who recreates a deleted Pod? |
-| 25–32 | Read the architecture | How does a request reach the app? |
-| 32–45 | Access and prerequisite checks | Are we using the correct cluster? |
-| 45–65 | Deploy and access | Why do labels matter? |
-| 65–85 | Update and undo | What changes a Deployment revision? |
-| 85–108 | Scale, self-heal and diagnose | Does replacement mean the same Pod returns? |
-| 108–120 | Cleanup and reflection | Which resources still cost money? |
+| Minutes | Activity                       | Question to answer                          |
+| ------- | ------------------------------ | ------------------------------------------- |
+| 0–12    | Welcome and introductions      | What would you like to operate confidently? |
+| 12–25   | Revision in pairs              | Who recreates a deleted Pod?                |
+| 25–32   | Read the architecture          | How does a request reach the app?           |
+| 32–45   | Access and prerequisite checks | Are we using the correct cluster?           |
+| 45–65   | Deploy and access              | Why do labels matter?                       |
+| 65–85   | Update and undo                | What changes a Deployment revision?         |
+| 85–108  | Scale, self-heal and diagnose  | Does replacement mean the same Pod returns? |
+| 108–120 | Cleanup and reflection         | Which resources still cost money?           |
 
 ## Before you start
 
-The instructor must provide:
+You must have:
 
 - An **existing EKS cluster** with Ready Linux **amd64** EC2 workers and access to the public image registry.
 - Cluster name, AWS region, expected AWS account and your team's namespace.
@@ -300,17 +299,17 @@ EndpointSlices can take a short time to reconcile. A previously running port-for
 
 ## Troubleshooting: collect evidence before changing things
 
-| Symptom | What to investigate |
-|---|---|
-| AWS credentials expired | Run the approved login process, then check `aws sts get-caller-identity`. |
-| API timeout | Instructor checks endpoint access, your current public egress IP allowlist, VPN/routing and DNS. A private laptop address is not a public endpoint allowlist address. |
-| `Unauthorized` / `Forbidden` | Check AWS identity, EKS access and namespace permissions. Do not solve it by granting cluster-admin. |
-| `Pending` Pods | Describe the Pod: capacity, architecture/node selectors, scheduling or quotas. |
-| `ImagePullBackOff` | Check the exact image/tag and worker access to the registry. |
-| `CrashLoopBackOff` | Check logs, previous logs and probe failures. |
-| Service has no backends | Compare its selector with Pod labels and readiness. |
-| Local port already in use | Stop the earlier tunnel or use `8081:80` and browse port 8081. |
-| Tunnel stopped after update/deletion | Restart it once replacement Pods are ready. |
+| Symptom                              | What to investigate                                                                                                                                                   |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AWS credentials expired              | Run the approved login process, then check `aws sts get-caller-identity`.                                                                                             |
+| API timeout                          | Instructor checks endpoint access, your current public egress IP allowlist, VPN/routing and DNS. A private laptop address is not a public endpoint allowlist address. |
+| `Unauthorized` / `Forbidden`         | Check AWS identity, EKS access and namespace permissions. Do not solve it by granting cluster-admin.                                                                  |
+| `Pending` Pods                       | Describe the Pod: capacity, architecture/node selectors, scheduling or quotas.                                                                                        |
+| `ImagePullBackOff`                   | Check the exact image/tag and worker access to the registry.                                                                                                          |
+| `CrashLoopBackOff`                   | Check logs, previous logs and probe failures.                                                                                                                         |
+| Service has no backends              | Compare its selector with Pod labels and readiness.                                                                                                                   |
+| Local port already in use            | Stop the earlier tunnel or use `8081:80` and browse port 8081.                                                                                                        |
+| Tunnel stopped after update/deletion | Restart it once replacement Pods are ready.                                                                                                                           |
 
 Useful investigation commands:
 
@@ -350,46 +349,27 @@ Complete [EVIDENCE.md](EVIDENCE.md) in your own words. Include:
 
 Do not submit access tokens, kubeconfig, AWS account details or unredacted terminal screenshots. Record actual observations; do not fill in expected results as though you observed them.
 
-## Next session: GitHub Actions + AWS OIDC
-
-CI/CD is **optional follow-up**, outside today's core lab. We use **GitHub Actions**, not Jenkins.
-
-```text
-GitHub commit → Actions → short-lived AWS role via OIDC
-                           ├─ build and push image to ECR
-                           └─ deploy image to this team's EKS namespace
-```
-
-Before enabling deployment automation, the instructor must configure:
-
-- A GitHub OIDC trust policy restricted to the intended repository and branch or protected environment, with the correct audience.
-- ECR push permissions limited to the intended repository; `ecr:GetAuthorizationToken` is the separate registry authentication permission.
-- EKS cluster discovery and namespace-scoped deployment access, without administrator policies or static AWS secrets.
-- A runner that can reach the EKS API. A cluster allowing only your laptop's public IP will not automatically allow a hosted GitHub runner.
-- Workflow permissions such as `contents: read` and `id-token: write`, immutable image tags, rollout verification and environment controls.
-
-**Design question:** what is the difference between being allowed to assume an AWS role and being allowed to change a Kubernetes Deployment?
-
 This student repository intentionally contains no automatically triggered deployment workflow. Build the reviewed workflow together next session.
 
 ## References and learning path
 
-| Resource | Use it for |
-|---|---|
-| [Kubernetes Basics — official beginner tutorials](https://kubernetes.io/docs/tutorials/kubernetes-basics/) | Start here: deploy, explore, expose, scale and update. |
-| [Kubernetes overview](https://kubernetes.io/docs/concepts/overview/) | Understand the platform and its core ideas. |
-| [kubectl Quick Reference / Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/quick-reference/) | Find command patterns during challenges. |
-| [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) | Study revisions, rolling updates and rollback. |
-| [Services](https://kubernetes.io/docs/concepts/services-networking/service/) | Understand selectors, ports and stable access. |
-| [Port-forward tutorial](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) | Understand local access and its limits. |
-| [hello-app source](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/tree/main/quickstarts/hello-app) | Inspect the sample application used here. |
-| [GitHub Actions: OIDC in AWS](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws) | Prepare short-lived CI authentication. |
-| [EKS access entries](https://docs.aws.amazon.com/eks/latest/userguide/creating-access-entries.html) | Understand how AWS identities receive cluster access. |
-| [ECR image push permissions](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push-iam.html) | Scope the future pipeline's registry permissions. |
+| Resource                                                                                                                           | Use it for                                             |
+| ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| [Kubernetes Basics — official beginner tutorials](https://kubernetes.io/docs/tutorials/kubernetes-basics/)                         | Start here: deploy, explore, expose, scale and update. |
+| [Kubernetes overview](https://kubernetes.io/docs/concepts/overview/)                                                               | Understand the platform and its core ideas.            |
+| [kubectl Quick Reference / Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/quick-reference/)                             | Find command patterns during challenges.               |
+| [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)                                               | Study revisions, rolling updates and rollback.         |
+| [Services](https://kubernetes.io/docs/concepts/services-networking/service/)                                                       | Understand selectors, ports and stable access.         |
+| [Port-forward tutorial](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)      | Understand local access and its limits.                |
+| [hello-app source](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/tree/main/quickstarts/hello-app)               | Inspect the sample application used here.              |
+| [GitHub Actions: OIDC in AWS](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws) | Prepare short-lived CI authentication.                 |
+| [EKS access entries](https://docs.aws.amazon.com/eks/latest/userguide/creating-access-entries.html)                                | Understand how AWS identities receive cluster access.  |
+| [ECR image push permissions](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push-iam.html)                           | Scope the future pipeline's registry permissions.      |
 
 Some upstream examples use Bash. This lab's local commands use PowerShell: `$NAME = "value"` for variables, `$env:NAME` for environment variables, and `Invoke-RestMethod` for HTTP requests. A Bash trailing `\` is not PowerShell line continuation. Commands here use single lines to avoid that difference.
 
 **Course alignment:** YAML, namespaces, Deployments, Services and managed Kubernetes; registry and pipeline integration follows next. The sample application is maintained by GoogleCloudPlatform in the Apache-2.0-licensed `kubernetes-engine-samples` repository; consult its upstream license. These lab materials do not include the original syllabus or redistribute application source code.
 
 **Validation note:** materials were reviewed locally; successful execution on your teaching cluster must be confirmed during instructor rehearsal.
+
 # Practical_Devops04
