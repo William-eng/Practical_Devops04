@@ -1,0 +1,19 @@
+# Local credentials and environment settings
+.aws/
+.kube/
+.env
+.env.*
+!.env.example
+*kubeconfig*
+*.pem
+*.key
+credentials
+*.tfstate*
+.terraform/
+
+# Local notes, evidence screenshots and machine files
+private/
+local-evidence/
+*.log
+Thumbs.db
+.DS_Store
