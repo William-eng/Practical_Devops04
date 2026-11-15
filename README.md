@@ -1,4 +1,4 @@
-# Practical DevOps Cohort 4 — Provision, Deploy, Observe, Recover
+# Practical DevOps Cohort 4: Provision, Deploy, Observe, Recover
 
 **Duration:** 2-hour application lab **after cluster provisioning** (allow an additional 30–60+ minutes for cluster creation and troubleshooting)  
 **Terminal:** Windows PowerShell 5.1 or PowerShell 7  
@@ -48,23 +48,9 @@ flowchart TB
 
 `kubectl port-forward service/hello` tunnels to one selected Pod; it **does not** demonstrate Service load balancing. A Deployment uses a ReplicaSet to maintain the desired number of Pods. EKS control plane and EC2 worker nodes are separately billed resources.
 
-## Today's route
-
-| Time | Activity | Question |
-|---|---|---|
-| **Pre-lab: 30–60+ min** | Instructor: create EKS with `eksctl`; grant access; create namespaces | Where does Kubernetes run? |
-| 0–12 min | Welcome and introductions | What would you like to operate confidently? |
-| 12–25 min | Revision in pairs | Who recreates a deleted Pod? |
-| 25–32 min | Read the architecture | How does a request reach the app? |
-| 32–45 min | Access and prerequisite checks | Are we using the correct cluster? |
-| 45–65 min | Deploy and access | Why do labels matter? |
-| 65–85 min | Update and undo | What changes a Deployment revision? |
-| 85–108 min | Scale, self-heal and diagnose | Does replacement mean the same Pod returns? |
-| 108–120 min | App cleanup and reflection | Which resources still cost money? |
-
 ---
 
-# Part A — Provision the EKS cluster with eksctl (instructor-led)
+# Part A: Provision the EKS cluster with eksctl (instructor-led)
 
 ## A1. Understand the infrastructure
 
@@ -150,13 +136,13 @@ aws sts get-caller-identity
 
 Confirm the AWS account and the `metadata.name` / `metadata.region` in the YAML with your instructor. Creating an EKS cluster incurs AWS charges.
 
-### Step 1 — Inspect the cluster definition
+### Step 1: Inspect the cluster definition
 
 ```powershell
 Get-Content .\eksctl-cluster.yaml
 ```
 
-### Step 2 — Check whether the cluster exists
+### Step 2: Check whether the cluster exists
 
 ```powershell
 $env:AWS_REGION = "us-east-1"
@@ -166,7 +152,7 @@ aws eks describe-cluster --name $EKS_CLUSTER --region $env:AWS_REGION
 
 If it returns `ResourceNotFoundException`, continue. If it exists, **reuse it** instead of provisioning another.
 
-### Step 3 — Provision the cluster
+### Step 3: Provision the cluster
 
 ```powershell
 eksctl create cluster -f .\eksctl-cluster.yaml
@@ -174,7 +160,7 @@ eksctl create cluster -f .\eksctl-cluster.yaml
 
 Allow approximately 15–30 minutes or longer. `eksctl` creates the control plane, networking and managed EC2 node group described by the configuration. If creation fails, inspect the CloudFormation stacks before retrying.
 
-### Step 4 — Connect kubectl and confirm readiness
+### Step 4: Connect kubectl and confirm readiness
 
 ```powershell
 aws eks update-kubeconfig --region $env:AWS_REGION --name $EKS_CLUSTER
@@ -258,7 +244,7 @@ Create an appropriate `RoleBinding` to the Kubernetes group mapped to that team'
 
 ---
 
-# Part B — Student application lab (original learning path retained)
+# Part B: Student application lab (original learning path retained)
 
 ## 1. Prove you are in the right place
 
