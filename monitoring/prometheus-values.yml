@@ -7,6 +7,13 @@ grafana:
   persistence:
     enabled: false
 
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      uid: loki
+      access: proxy
+      url: http://loki.monitoring.svc.cluster.local:3100
+
   resources:
     requests:
       cpu: 50m
