@@ -5,7 +5,7 @@ metadata:
   region: us-east-1
 managedNodeGroups:
   - name: cohort4-workers
-    instanceType: t2.micro
+    instanceType: t2.medium
     desiredCapacity: 2
     minSize: 2
     maxSize: 3
